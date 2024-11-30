@@ -14,16 +14,18 @@ export class AuthService {
   private currentUserSubject: BehaviorSubject<any>;
 
   constructor(private http: HttpClient, private router: Router) {
+
     if (typeof window !== 'undefined' && window.localStorage) {
       this.currentUserSubject = new BehaviorSubject<any>(JSON.parse(localStorage.getItem('currentUser') || '{}'));
     } else {
       this.currentUserSubject = new BehaviorSubject<any>({});
     }
+
   }
 
 
   getToken(): string | null {
-    return localStorage.getItem('token'); // Example of fetching token from localStorage
+    return localStorage.getItem('jwt_token'); // Example of fetching token from localStorage
   }
 
 
@@ -35,21 +37,27 @@ export class AuthService {
   // Register a new user
   register(userData: any): Observable<any> {
     return this.http
-      .post(`${this.apiUrl}/register`, userData)
+      .post(`${this.apiUrl}/public/register`, userData)
       .pipe(catchError(this.handleError));
   }
 
   // Login user and store JWT token
   login(username: string, password: string): Observable<any> {
-    return this.http
-      .post<any>(`${this.apiUrl}/login`, { username, password })
-      .pipe(catchError(this.handleError));
+    return this.http.post<any>(
+      `${this.apiUrl}/public/login`,
+      { username, password },
+      {headers: { 'Content-Type': 'application/json' }}
+    );
   }
 
-  loadUserData() :Observable<any>{
-    return this.http
-      .get(`${this.apiUrl}/public/users`)
-      .pipe(catchError(this.handleError));
+  loadUserData():Observable<any>{
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${localStorage.getItem('jwt_token')}`
+    });
+
+    return this.http.get<any>(
+      `http://localhost:8080/users`,{headers});
   }
 
   // Logout user by clearing local storage and redirecting

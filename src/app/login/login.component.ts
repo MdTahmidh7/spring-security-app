@@ -20,16 +20,22 @@ export class LoginComponent {
               private router: Router) {}
 
   login(): void {
+    localStorage.removeItem('jwt_token');
     this.authService.login(this.username, this.password).subscribe({
-      next: (data) => {
-        localStorage.setItem('jwt_token', data.token);
-        this.router.navigate(['/']);
+      next: (data: any) => {
+        const token = data.token;
+        localStorage.setItem('jwt_token', token.split(' ')[1]);
+        this.router.navigate(['/dashboard']);
       },
-      error: (err) => alert('Login failed!'),
+      error: (err) => {
+        console.error("Login failed!", err);
+        alert('Login failed!');
+      },
     });
   }
 
-  loadUsers() {
+
+ /* loadUsers() {
     this.authService.loadUserData().subscribe({
       next:(data)=>{
         console.log("Data"+ data)
@@ -39,5 +45,5 @@ export class LoginComponent {
         alert('Loading data failed');
       },
     })
-  }
+  }*/
 }

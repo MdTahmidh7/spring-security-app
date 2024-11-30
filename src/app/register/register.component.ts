@@ -13,22 +13,21 @@ import {Router} from "@angular/router";
   styleUrl: './register.component.css'
 })
 export class RegisterComponent {
-  email: string = '';
+
+  id: number = 0;
   username: string = '';
-  mobileNo: string = '';
   password: string = '';
-  address: string = '';
+  passwordType: any;
+
 
   constructor(private authService: AuthService,
               private router: Router) {}
 
   register(): void {
     const userData = {
-      email: this.email,
+      id: this.id,
       username: this.username,
-      mobileNo: this.mobileNo,
       password: this.password,
-      address: this.address,
     };
 
     this.authService.register(userData).subscribe({
@@ -38,5 +37,9 @@ export class RegisterComponent {
       },
       error: (err) => alert('Registration failed!'),
     });
+  }
+
+  togglePasswordType() {
+    this.passwordType = this.passwordType === 'password' ? 'text' : 'password';
   }
 }

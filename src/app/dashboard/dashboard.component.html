@@ -1,1 +1,21 @@
 <p>dashboard works!</p>
+<button (click)="loadUsers()">Load Data</button>
+@if (allUsers.length > 0){
+  <div class="overflow-x-auto">
+    <table class="table">
+      <!-- head -->
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr class="bg-base-200" *ngFor="let user of allUsers">
+        <th>{{user.id}}</th>
+        <td>{{user.username}}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+}

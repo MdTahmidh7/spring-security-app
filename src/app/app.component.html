@@ -59,7 +59,13 @@
         <span class="badge badge-xs badge-primary indicator-item"></span>
       </div>
     </button>
-    <button (click)="showAlert()" class="btn btn-outline btn-sm"><i class="fas fa-sign-out-alt"></i></button>
+    @if (token != null){
+      <button
+        (click)="showAlert()"
+        class="btn btn-outline btn-sm">
+        <i class="fas fa-sign-out-alt"></i>
+      </button>
+    }
   </div>
 </div>
 <router-outlet></router-outlet>

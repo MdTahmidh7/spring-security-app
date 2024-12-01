@@ -3,6 +3,7 @@ import {AuthService} from "../auth/auth.service";
 import {NgForOf} from "@angular/common";
 import {User} from "../model/User";
 import {Router} from "@angular/router";
+import {UserDTO} from "../model/UserDTO";
 
 @Component({
   selector: 'app-dashboard',
@@ -15,10 +16,14 @@ import {Router} from "@angular/router";
 })
 export class DashboardComponent {
 
-  allUsers:User[] = [];
+  allUsers:UserDTO[] = [];
 
   constructor(private authService: AuthService,
               private router: Router) {}
+
+  ngOnInit() {
+    this.loadUsers();
+  }
 
 
   loadUsers() {

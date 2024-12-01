@@ -3,6 +3,7 @@ import {Router, RouterLink, RouterOutlet} from '@angular/router';
 import {AuthService} from "./auth/auth.service";
 import Swal from "sweetalert2";
 import {SweetAlertService} from "./sweetaleart/sweet-alert.service";
+import {TokenService} from "./tokenService/TokenService";
 
 @Component({
   selector: 'app-root',
@@ -21,18 +22,23 @@ export class AppComponent implements OnInit {
 
   constructor(private router: Router,
               private authService: AuthService,
-              private sweetAlertService: SweetAlertService) {
+              private sweetAlertService: SweetAlertService,
+              private tokenService: TokenService) {
   }
 
   ngOnInit() {
 
-    this.token = this.authService.getToken();
+    // Subscribe to the token observable to get updates
+    this.tokenService.token$.subscribe(token => {
+      this.token = token;
 
-    if (this.token) {
-      this.router.navigate(['/dashboard']);
-    } else {
-      this.router.navigate(['/login']);
-    }
+      // Navigate based on token presence
+      if (this.token) {
+        this.router.navigate(['/dashboard']);
+      } else {
+        this.router.navigate(['/login']);
+      }
+    });
 
   }
 

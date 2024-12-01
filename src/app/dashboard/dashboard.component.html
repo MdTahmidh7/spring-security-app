@@ -1,9 +1,9 @@
-<p>dashboard works!</p>
-<button (click)="loadUsers()">Load Data</button>
+<!--<p>dashboard works!</p>
+<button (click)="loadUsers()">Load Data</button>-->
 @if (allUsers.length > 0){
-  <div class="overflow-x-auto">
+  <!--<div class="overflow-x-auto">
     <table class="table">
-      <!-- head -->
+      &lt;!&ndash; head &ndash;&gt;
       <thead>
       <tr>
         <th>ID</th>
@@ -12,10 +12,29 @@
       </thead>
       <tbody>
       <tr class="bg-base-200" *ngFor="let user of allUsers">
-        <th>{{user.id}}</th>
+        <th>{{user.email}}</th>
         <td>{{user.username}}</td>
       </tr>
       </tbody>
     </table>
+  </div>-->
+  <div class="overflow-x-auto mt-10 mb-10 " style="width: 65vw; margin-left: auto; margin-right: auto">
+    <table class="table w-full table-zebra">
+      <!-- Table Head -->
+      <thead>
+      <tr class="bg-base-200">
+        <th>ID</th>
+        <th>Name</th>
+      </tr>
+      </thead>
+      <!-- Table Body -->
+      <tbody>
+      <tr class="hover:bg-base-200" *ngFor="let user of allUsers">
+        <td>{{ user.email }}</td>
+        <td>{{ user.username }}</td>
+      </tr>
+      </tbody>
+    </table>
   </div>
+
 }

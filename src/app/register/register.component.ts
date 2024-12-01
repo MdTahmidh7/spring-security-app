@@ -1,43 +1,104 @@
 import { Component } from '@angular/core';
-import {FormsModule} from "@angular/forms";
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {AuthService} from "../auth/auth.service";
 import {Router} from "@angular/router";
+import {UserDTO} from "../model/UserDTO";
+import {SweetAlertService} from "../sweetaleart/sweet-alert.service";
 
 @Component({
   selector: 'app-register',
   standalone: true,
   imports: [
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })
 export class RegisterComponent {
 
-  id: number = 0;
-  username: string = '';
-  password: string = '';
   passwordType:string = 'password';
+
+  registerForm: FormGroup;
 
 
   constructor(private authService: AuthService,
-              private router: Router) {}
+              private router: Router,
+              private sweetAlertService: SweetAlertService,
+              private fb: FormBuilder) {}
 
-  register(): void {
-    const userData = {
-      id: this.id,
-      username: this.username,
-      password: this.password,
-    };
 
-    this.authService.register(userData).subscribe({
-      next: (data) => {
-        alert('Registration successful!');
-        this.router.navigate(['/login']);
-      },
-      error: (err) => alert('Registration failed!'),
+  ngOnInit(): void {
+    this.registerForm = this.fb.group({
+      username: ['', [Validators.required, Validators.minLength(3)]],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      confirmPassword: ['', [Validators.required, this.matchPassword.bind(this)]],
     });
   }
+
+  // Custom validator to match passwords
+  matchPassword(control: any) {
+    if (this.registerForm && control.value !== this.registerForm.get('password')?.value) {
+      return { mismatch: true };
+    }
+    return null;
+  }
+
+  onSubmit(): void {
+
+    if (this.registerForm.invalid) {
+      return;
+    }
+    this.authService.register(this.registerForm.value).subscribe({
+      next: (data) => {
+        this.sweetAlertService.showAlert(
+          "Registration successful",
+          "You can now login",
+          "success"
+        );
+        this.router.navigate(['/login']);
+      },
+      error: (err) => {
+        console.log(err);
+        this.sweetAlertService.showAlert(
+          "Registration failed",
+          err.error.message,
+          "error"
+        );
+      },
+    });
+  }
+
+
+
+  /*register(): void {
+
+    this.authService.clearTokenFromLocalStorage();
+
+     this.userData = {
+      username: this.username,
+      password: this.password
+    }
+
+    this.authService.register(this.userData).subscribe({
+      next: (data) => {
+        this.sweetAlertService.showAlert(
+          "Registration successful",
+          "You can now login",
+          "success");
+        this.router.navigate(['/login']);
+      },
+      error: (err) => {
+        this.sweetAlertService.showAlert(
+          "Registration failed",
+          err.error.message,
+          "error");
+      },
+    });
+
+
+  }*/
 
   togglePasswordType() {
     this.passwordType = this.passwordType === 'password' ? 'text' : 'password';

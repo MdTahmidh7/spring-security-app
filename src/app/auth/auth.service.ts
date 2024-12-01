@@ -3,6 +3,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { catchError } from 'rxjs/operators';
+import {UserDTO} from "../model/UserDTO";
+import {TokenService} from "../tokenService/TokenService";
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +15,7 @@ export class AuthService {
   private apiUrl = 'http://localhost:8080';  // Replace with your backend API URL
   private currentUserSubject: BehaviorSubject<any>;
 
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(private http: HttpClient, private router: Router, private tokenService: TokenService) {
 
     if (typeof window !== 'undefined' && window.localStorage) {
       this.currentUserSubject = new BehaviorSubject<any>(JSON.parse(localStorage.getItem('currentUser') || '{}'));
@@ -24,8 +26,19 @@ export class AuthService {
   }
 
 
-  getToken(): string | null {
+  /*getToken(): string | null {
     return localStorage.getItem('jwt_token'); // Example of fetching token from localStorage
+  }*/
+
+  getToken(): string | null {
+    return this.tokenService.getToken();
+  }
+
+
+  // Delete JWT token from local storage
+  clearTokenFromLocalStorage(): void {
+    localStorage.removeItem('jwt_token');
+    this.currentUserSubject.next(null);
   }
 
 
@@ -35,7 +48,7 @@ export class AuthService {
   }
 
   // Register a new user
-  register(userData: any): Observable<any> {
+  register(userData: UserDTO): Observable<any> {
     return this.http
       .post(`${this.apiUrl}/public/register`, userData)
       .pipe(catchError(this.handleError));
@@ -63,6 +76,7 @@ export class AuthService {
   // Logout user by clearing local storage and redirecting
   logout(): void {
     localStorage.removeItem('jwt_token');
+    this.tokenService.setToken(null);
     this.currentUserSubject.next(null);
     this.router.navigate(['/login']);
   }

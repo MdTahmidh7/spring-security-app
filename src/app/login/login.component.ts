@@ -1,14 +1,16 @@
 import { Component } from '@angular/core';
 import {AuthService} from "../auth/auth.service";
-import {Router} from "@angular/router";
+import {Router, RouterLink} from "@angular/router";
 import {FormsModule} from "@angular/forms";
 import {SweetAlertService} from "../sweetaleart/sweet-alert.service";
+import {TokenService} from "../tokenService/TokenService";
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [
-    FormsModule
+    FormsModule,
+    RouterLink
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
@@ -19,13 +21,15 @@ export class LoginComponent {
 
   constructor(private authService: AuthService,
               private router: Router,
-              private sweetAlertService: SweetAlertService) {}
+              private sweetAlertService: SweetAlertService,
+              private tokenService: TokenService) {}
 
   login(): void {
     localStorage.removeItem('jwt_token');
     this.authService.login(this.username, this.password).subscribe({
       next: (data: any) => {
         const token = data.token;
+        this.tokenService.setToken(token);
         localStorage.setItem('jwt_token', token.split(' ')[1]);
         this.sweetAlertService.showToast(
           "Login successful",

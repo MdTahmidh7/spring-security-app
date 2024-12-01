@@ -55,14 +55,13 @@
         class="grow"
         value=""
         placeholder="****" />
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 16 16"
-        fill="currentColor"
-        class="h-4 w-4 opacity-70 cursor-pointer"
-        (click)="togglePasswordType()">
-        <path d="M12 9c3.355 0 6 2.646 6 5.893V19.5a.5.5 0 0 1-.5.5H9a.5.5 0 0 1-.5-.5V14.893C9 11.646 12 9 12 9Zm0-4.5c2.21 0 4 1.79 4 3.993V19.5a.5.5 0 0 1-.5.5H8a.5.5 0 0 1-.5-.5V8.493C8 4.79 9.79 3 12 3Zm0 6.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5Z" />
-      </svg>
+      @if (passwordType === 'password'){
+        <i class="fas fa-eye" (click)="togglePasswordType()"></i>
+      }
+      @else{
+        <i class="fas fa-eye-slash" (click)="togglePasswordType()"></i>
+      }
+
     </label>
 
     <button class="btn btn-active btn-neutral mt-2" type="submit">Registers</button>

@@ -17,7 +17,7 @@ export class RegisterComponent {
   id: number = 0;
   username: string = '';
   password: string = '';
-  passwordType: any;
+  passwordType:string = 'password';
 
 
   constructor(private authService: AuthService,

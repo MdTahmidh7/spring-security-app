@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Router, RouterOutlet} from '@angular/router';
+import {Router, RouterLink, RouterOutlet} from '@angular/router';
 import {AuthService} from "./auth/auth.service";
 import Swal from "sweetalert2";
 import {SweetAlertService} from "./sweetaleart/sweet-alert.service";
@@ -9,7 +9,8 @@ import {SweetAlertService} from "./sweetaleart/sweet-alert.service";
   templateUrl: './app.component.html',
   standalone: true,
   imports: [
-    RouterOutlet
+    RouterOutlet,
+    RouterLink
   ],
   styleUrls: ['./app.component.css']
 })

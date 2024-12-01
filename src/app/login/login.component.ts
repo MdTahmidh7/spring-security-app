@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {AuthService} from "../auth/auth.service";
 import {Router} from "@angular/router";
 import {FormsModule} from "@angular/forms";
+import {SweetAlertService} from "../sweetaleart/sweet-alert.service";
 
 @Component({
   selector: 'app-login',
@@ -17,7 +18,8 @@ export class LoginComponent {
   password: string = '';
 
   constructor(private authService: AuthService,
-              private router: Router) {}
+              private router: Router,
+              private sweetAlertService: SweetAlertService) {}
 
   login(): void {
     localStorage.removeItem('jwt_token');
@@ -25,11 +27,16 @@ export class LoginComponent {
       next: (data: any) => {
         const token = data.token;
         localStorage.setItem('jwt_token', token.split(' ')[1]);
+        this.sweetAlertService.showToast(
+          "Login successful",
+          "success");
         this.router.navigate(['/dashboard']);
       },
       error: (err) => {
-        console.error("Login failed!", err);
-        alert('Login failed!');
+        this.sweetAlertService.showAlert(
+          "Login failed",
+          "Wrong username or password",
+          "error");
       },
     });
   }

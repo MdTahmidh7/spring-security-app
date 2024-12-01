@@ -62,7 +62,7 @@ export class AuthService {
 
   // Logout user by clearing local storage and redirecting
   logout(): void {
-    localStorage.removeItem('currentUser');
+    localStorage.removeItem('jwt_token');
     this.currentUserSubject.next(null);
     this.router.navigate(['/login']);
   }

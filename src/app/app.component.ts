@@ -1,14 +1,55 @@
-import { Component } from '@angular/core';
-import {RouterModule, RouterOutlet} from '@angular/router';
-import {DashboardComponent} from "./dashboard/dashboard.component";
+import {Component, OnInit} from '@angular/core';
+import {Router, RouterOutlet} from '@angular/router';
+import {AuthService} from "./auth/auth.service";
+import Swal from "sweetalert2";
+import {SweetAlertService} from "./sweetaleart/sweet-alert.service";
 
 @Component({
   selector: 'app-root',
-  standalone: true,
-  imports: [RouterOutlet, DashboardComponent,RouterModule],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  standalone: true,
+  imports: [
+    RouterOutlet
+  ],
+  styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
+
   title = 'jwt-auth-app';
+  token: string | null = null;
+
+  constructor(private router: Router,
+              private authService: AuthService,
+              private sweetAlertService: SweetAlertService) {
+  }
+
+  ngOnInit() {
+
+    this.token = this.authService.getToken();
+
+    if (this.token) {
+      this.router.navigate(['/dashboard']);
+    } else {
+      this.router.navigate(['/login']);
+    }
+
+  }
+
+  logout() {
+      this.authService.logout();
+      this.router.navigate(['/login']);
+  }
+
+  showAlert() {
+    this.sweetAlertService.showConfirmationDialog(
+      "Are you sure?",
+      "You will be logged out!",
+      "Logout")
+      .then((result) => {
+        if (result.isConfirmed) {
+          this.logout();
+        }
+      });
+  }
+
 }

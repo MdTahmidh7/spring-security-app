@@ -7,7 +7,7 @@ import { JwtInterceptor } from './auth/jwt.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideHttpClient(withInterceptors([JwtInterceptor])),
+    provideHttpClient(withInterceptors([JwtInterceptor]),withFetch()),
     importProvidersFrom(RouterModule.forRoot(routes)),
   ],
 };

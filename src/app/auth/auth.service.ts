@@ -26,11 +26,15 @@ export class AuthService {
   }
 
 
-  /*getToken(): string | null {
-    return localStorage.getItem('jwt_token'); // Example of fetching token from localStorage
-  }*/
-
   getToken(): string | null {
+    return localStorage.getItem('jwt_token'); // Example of fetching token from localStorage
+  }
+
+  getUserName(): string | null {
+    return localStorage.getItem('username');
+  }
+
+  getTokenFromTokenService(): string | null {
     return this.tokenService.getToken();
   }
 

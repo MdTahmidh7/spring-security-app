@@ -60,11 +60,22 @@
       </div>
     </button>
     @if (token != null){
-      <button
-        (click)="showAlert()"
-        class="btn btn-outline btn-sm">
-        <i class="fas fa-sign-out-alt"></i>
-      </button>
+      <div class="flex gap-1">
+        <button
+          (click)="showAlert()"
+          class="btn btn-outline btn-sm">
+          <i class="fas fa-sign-out-alt"></i>
+        </button>
+
+        <div class="dropdown dropdown-end">
+          <button (click)="getUsername()" tabindex="0" role="button" class="btn btn-sm btn-ghost rounded-btn"><i class="fas fa-user-alt"></i></button>
+          <ul
+            tabindex="0"
+            class="menu dropdown-content bg-base-100 rounded-box z-[1] mt-4 w-52 p-2 shadow">
+            <li><a>{{username}}</a></li>
+          </ul>
+        </div>
+      </div>
     }
   </div>
 </div>

@@ -19,6 +19,7 @@ export class AppComponent implements OnInit {
 
   title = 'jwt-auth-app';
   token: string | null = null;
+  username: string | '' = '';
 
   constructor(private router: Router,
               private authService: AuthService,
@@ -31,7 +32,9 @@ export class AppComponent implements OnInit {
     // Subscribe to the token observable to get updates
     this.tokenService.token$.subscribe(token => {
       this.token = token;
-
+      if(this.token == null){
+        this.token = this.authService.getToken();
+      }
       // Navigate based on token presence
       if (this.token) {
         this.router.navigate(['/dashboard']);
@@ -59,4 +62,7 @@ export class AppComponent implements OnInit {
       });
   }
 
+  getUsername() {
+    this.username = this.authService.getUserName();
+  }
 }

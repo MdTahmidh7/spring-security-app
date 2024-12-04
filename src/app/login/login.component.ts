@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import {AuthService} from "../auth/auth.service";
 import {Router, RouterLink} from "@angular/router";
-import {FormsModule} from "@angular/forms";
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {SweetAlertService} from "../sweetaleart/sweet-alert.service";
 import {NgClass} from "@angular/common";
 
@@ -12,26 +12,38 @@ import {NgClass} from "@angular/common";
   imports: [
     FormsModule,
     RouterLink,
-    NgClass
+    NgClass,
+    ReactiveFormsModule
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
-  username: string = '';
-  password: string = '';
+
   passwordType: string;
+  loginEditForm: FormGroup;
 
   constructor(private authService: AuthService,
               private router: Router,
-              private sweetAlertService: SweetAlertService) {}
+              private sweetAlertService: SweetAlertService,
+              private fb: FormBuilder ) {
 
+
+  }
+
+
+
+  ngOnInit(): void {
+    this.initializeLoginForm();
+  }
 
   login(): void {
-    localStorage.removeItem('jwt_token');
-    localStorage.removeItem('username'); // Clear existing username
 
-    this.authService.login(this.username, this.password).subscribe({
+    this.clearLocalStorage();
+    const username = this.loginEditForm.get('username')?.value;
+    const password = this.loginEditForm.get('password')?.value;
+
+    this.authService.login(username, password).subscribe({
       next: (data: any) => {
         const token = data.token;
         const jwtToken = token.split(' ')[1];
@@ -64,6 +76,11 @@ export class LoginComponent {
   }
 
 
+  private clearLocalStorage() {
+    localStorage.removeItem('jwt_token');
+    localStorage.removeItem('username'); // Clear existing username
+  }
+
   parseJwt (token) {
     let base64Url = token.split('.')[1];
     let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -75,5 +92,26 @@ export class LoginComponent {
 
   togglePasswordType() {
     this.passwordType = this.passwordType === 'password' ? 'text' : 'password';
+  }
+
+  private initializeLoginForm() {
+
+    this.loginEditForm = this.fb.group({
+      username: ['',
+        [
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(20)
+        ]
+      ],
+      password: ['',
+        [
+          Validators.required,
+          Validators.minLength(6),
+          Validators.maxLength(20)
+        ]
+      ],
+    });
+
   }
 }

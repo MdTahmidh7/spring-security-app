@@ -25,18 +25,6 @@
   </div>
 }
 
-<!--<dialog id="my_modal_1" class="modal">
-  <div class="modal-box">
-    <h3 class="text-lg font-bold">Hello!</h3>
-    <p class="py-4">Press ESC key or click the button below to close</p>
-    <div class="modal-action">
-      <form method="dialog">
-        &lt;!&ndash; if there is a button in form, it will close the modal &ndash;&gt;
-        <button class="btn">Close</button>
-      </form>
-    </div>
-  </div>
-</dialog>-->
 
 <dialog id="my_modal_1" class="modal">
   <div class="modal-box">
@@ -47,7 +35,7 @@
           <span class="label-text">Email</span>
         </label>
         <!-- Bind the email input to the form control -->
-        <input type="email" formControlName="email" class="input input-bordered col-8" />
+        <input type="email" formControlName="email" class="input input-bordered col-8 focus:outline-none focus:ring-0" />
         <div *ngIf="editForm.get('email')?.invalid && editForm.get('email')?.touched">
           <small class="text-red-500">Please enter a valid email.</small>
         </div>

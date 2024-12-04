@@ -1,35 +1,41 @@
 
-<div class="card lg:card-side bg-base-100 shadow-xl max-w-2xl mx-auto mt-10">
+<!--<div class="card lg:card-side bg-base-100 shadow-xl max-w-2xl mx-auto mt-10">
   <figure class="lg:w-1/2">
     <img src="https://picsum.photos/seed/login/800/600" alt="Random image" class="object-cover w-full h-full" />
-    <!--<img src="./asset/image/login.png" alt="Random image" />-->
+    &lt;!&ndash;<img src="./asset/image/login.png" alt="Random image" />&ndash;&gt;
   </figure>
   <div class="card-body lg:w-2/3">
     <h2 class="card-title text-2xl font-bold mb-6">Login</h2>
-    <form>
-      <div class="form-control">
+    <form [formGroup]="loginForm " (ngSubmit)="login()">
+      <div class="form-control border-0">
         <label class="label">
           <span class="label-text">Username</span>
         </label>
         <label class="input input-bordered flex items-center gap-2">
           <i class="fa fa-user" aria-hidden="true"></i>
-          <input name="username" [(ngModel)]="username" type="text" class="grow" placeholder="Tahmid" />
+          <input name="username" formControlName="username" type="text" class="grow" placeholder="Type username" />
         </label>
+        @if (loginForm.get('username')?.invalid && loginForm.get('username')?.touched) {
+          <div class="text-red-500 ">Username is required.</div>
+        }
       </div>
-      <div class="form-control mt-4">
+      <div class="form-control mt-2 border-0">
         <label class="label">
           <span class="label-text">Password</span>
         </label>
         <label class="input input-bordered flex items-center gap-2">
           <i class="fas fa-key"></i>
-          <input name="password" [(ngModel)]="password" [type]="passwordType" class="grow" placeholder="Enter password" />
+          <input name="password" formControlName="password" [type]="passwordType" class="grow" placeholder="Enter password" />
           <i class="fas" [ngClass]="passwordType === 'password' ? 'fa-eye' : 'fa-eye-slash'" (click)="togglePasswordType()"></i>
         </label>
+        @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
+          <div class="text-red-500">Password is required.</div>
+        }
         <label class="label">
           <a href="#" class="label-text-alt link link-hover">Forgot password?</a>
         </label>
       </div>
-      <div class="form-control mt-6">
+      <div class="form-control mt-6 border-0">
         <button class="btn btn-primary" (click)="login()">Login</button>
       </div>
     </form>
@@ -39,4 +45,57 @@
       <a routerLink="/register" class="link link-primary">Sign up now</a>
     </div>
   </div>
+</div>-->
+
+<div class="card lg:card-side bg-base-100 shadow-xl max-w-2xl mx-auto mt-10">
+  <figure class="lg:w-1/2 height-616px">
+    <img
+      src="https://picsum.photos/seed/login/800/600"
+      alt="Random image"
+      class="object-cover w-full h-full"
+    />
+    <!--<img src="./asset/image/login.png" alt="Random image" />-->
+  </figure>
+  <div class="card-body lg:w-2/3">
+    <h2 class="card-title text-2xl font-bold mb-2">Login</h2>
+    <form [formGroup]="loginEditForm" (ngSubmit)="login()">
+      <div class="form-control border-0">
+        <label class="label">
+          <span class="label-text">Username</span>
+        </label>
+        <label class="input input-bordered flex items-center gap-2">
+          <i class="fa fa-user" aria-hidden="true"></i>
+          <input name="username" formControlName="username" type="text" class="grow" placeholder="Type username" />
+        </label>
+        @if (loginEditForm.get('username')?.invalid && loginEditForm.get('username')?.touched) {
+          <small class="text-red-500">Username is required.</small>
+        }
+      </div>
+      <div class="form-control border-0">
+        <label class="label">
+          <span class="label-text">Password</span>
+        </label>
+        <label class="input input-bordered flex items-center gap-2">
+          <i class="fas fa-key"></i>
+          <input name="password" formControlName="password" [type]="passwordType" class="grow" placeholder="Enter password" />
+          <i class="fas" [ngClass]="passwordType === 'password' ? 'fa-eye' : 'fa-eye-slash'" (click)="togglePasswordType()"></i>
+        </label>
+        @if (loginEditForm.get('password')?.invalid && loginEditForm.get('password')?.touched) {
+          <small class="text-red-500">Password is required.</small>
+        }
+        <label class="label">
+          <a href="#" class="label-text-alt link link-hover">Forgot password?</a>
+        </label>
+      </div>
+      <div class="form-control mt-2 border-0">
+        <button [disabled]="loginEditForm.invalid" class="btn btn-primary">Login</button>
+      </div>
+    </form>
+    <div class="divider">OR</div>
+    <div class="text-center">
+      <p>Don't have an account?</p>
+      <a routerLink="/register" class="link link-primary">Sign up now</a>
+    </div>
+  </div>
 </div>
+

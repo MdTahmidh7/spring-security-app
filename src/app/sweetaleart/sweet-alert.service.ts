@@ -37,14 +37,14 @@ export class SweetAlertService {
   }
 
 // Toast message
-showToast(title: string, icon: 'success' | 'error' | 'warning' | 'info' = 'success') {
+showToast(title: string, icon: 'success' | 'error' | 'warning' | 'info' = 'success', timer = 3000) {
   Swal.fire({
     title,
     icon,
     toast: true,
     position: 'top-end',
     showConfirmButton: false,
-    timer: 3000,
+    timer: timer,
     timerProgressBar: true,
     didOpen: (toast) => {
       toast.addEventListener('mouseenter', Swal.stopTimer);

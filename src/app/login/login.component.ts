@@ -3,8 +3,7 @@ import {AuthService} from "../auth/auth.service";
 import {Router, RouterLink} from "@angular/router";
 import {FormsModule} from "@angular/forms";
 import {SweetAlertService} from "../sweetaleart/sweet-alert.service";
-import {TokenService} from "../tokenService/TokenService";
-import jwt_decode from 'jwt-decode';
+import {NgClass} from "@angular/common";
 
 
 @Component({
@@ -12,7 +11,8 @@ import jwt_decode from 'jwt-decode';
   standalone: true,
   imports: [
     FormsModule,
-    RouterLink
+    RouterLink,
+    NgClass
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
@@ -20,11 +20,11 @@ import jwt_decode from 'jwt-decode';
 export class LoginComponent {
   username: string = '';
   password: string = '';
+  passwordType: string;
 
   constructor(private authService: AuthService,
               private router: Router,
-              private sweetAlertService: SweetAlertService,
-              private tokenService: TokenService) {}
+              private sweetAlertService: SweetAlertService) {}
 
 
   login(): void {
@@ -47,7 +47,10 @@ export class LoginComponent {
           console.error('Failed to decode token:', error);
         }
 
-        this.sweetAlertService.showToast("Login successful", "success");
+        this.sweetAlertService.showToast(
+          "Login successful",
+          "success",
+          2000);
         this.router.navigate(['/dashboard']);
       },
       error: (err) => {
@@ -61,19 +64,6 @@ export class LoginComponent {
   }
 
 
-
-  /* loadUsers() {
-     this.authService.loadUserData().subscribe({
-       next:(data)=>{
-         console.log("Data"+ data)
-       },
-       error: (err) => {
-         console.log(err);
-         alert('Loading data failed');
-       },
-     })
-   }*/
-
   parseJwt (token) {
     let base64Url = token.split('.')[1];
     let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -81,5 +71,9 @@ export class LoginComponent {
       return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
     }).join(''));
     return JSON.parse(jsonPayload);
+  }
+
+  togglePasswordType() {
+    this.passwordType = this.passwordType === 'password' ? 'text' : 'password';
   }
 }

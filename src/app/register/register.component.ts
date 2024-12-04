@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {AuthService} from "../auth/auth.service";
 import {Router} from "@angular/router";
-import {UserDTO} from "../model/UserDTO";
 import {SweetAlertService} from "../sweetaleart/sweet-alert.service";
 
 @Component({
@@ -70,37 +69,11 @@ export class RegisterComponent {
     });
   }
 
-
-
-  /*register(): void {
-
-    this.authService.clearTokenFromLocalStorage();
-
-     this.userData = {
-      username: this.username,
-      password: this.password
-    }
-
-    this.authService.register(this.userData).subscribe({
-      next: (data) => {
-        this.sweetAlertService.showAlert(
-          "Registration successful",
-          "You can now login",
-          "success");
-        this.router.navigate(['/login']);
-      },
-      error: (err) => {
-        this.sweetAlertService.showAlert(
-          "Registration failed",
-          err.error.message,
-          "error");
-      },
-    });
-
-
-  }*/
-
   togglePasswordType() {
     this.passwordType = this.passwordType === 'password' ? 'text' : 'password';
+  }
+
+  navigateToLogin() {
+    this.router.navigate(['/login']);
   }
 }

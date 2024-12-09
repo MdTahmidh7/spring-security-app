@@ -1,0 +1,24 @@
+<!--Create a daisyUI form for taking OTP as input-->
+<div class="flex justify-center mt-5">
+  <div class="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
+    <form [formGroup]="otpEditForm" (ngSubmit)="onSubmit()" class="card-body">
+      <div class="form-control border-0">
+        <label class="label">
+          <span class="label-text">OTP</span>
+        </label>
+        <input type="text" formControlName="otp" placeholder="Enter your OTP" class="input input-bordered"/>
+
+        <!--If OTP is less than 6 characters or more than 6 characters-->
+        @if (otpEditForm.get('otp')?.hasError('minlength') && otpEditForm.get('otp')?.touched){
+          <small class="text-red-500">OTP must be 6 characters.</small>
+        }
+        @if (otpEditForm.get('otp')?.hasError('maxlength') && otpEditForm.get('otp')?.touched){
+          <small class="text-red-500">OTP must be 6 characters.</small>
+        }
+      </div>
+      <div class="form-control mt-6 border-0">
+        <button [disabled]="otpEditForm.invalid" type="submit" class="btn btn-primary">Verify</button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -5,6 +5,7 @@ import {LayoutComponent} from "./layout/layout.component";
 import {RegisterComponent} from "./register/register.component";
 import {ResetPasswordComponent} from "./reset-password/reset-password.component";
 import {ForgetPasswordComponent} from "./forget-password/forget-password.component";
+import {VerifyOtpComponent} from "./verify-otp/verify-otp.component";
 
 
 
@@ -14,6 +15,7 @@ export const routes: Routes = [
   { path: 'register', component: RegisterComponent }, // Registration route
   { path: 'reset-password', component: ResetPasswordComponent },
   { path: 'forget-password', component: ForgetPasswordComponent},
+  { path: 'verify-otp', component: VerifyOtpComponent},
   {
     path: '',
     component: LayoutComponent, // Parent layout for routes with navbar

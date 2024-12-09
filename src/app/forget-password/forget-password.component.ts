@@ -60,7 +60,7 @@ export class ForgetPasswordComponent {
 
         //send username and email in request params
         const params = { username, email };
-        this.router.navigate(['/reset-password'], { queryParams: params });
+        this.router.navigate(['/verify-otp'], { queryParams: params });
       },
       error => {
         console.error(error);

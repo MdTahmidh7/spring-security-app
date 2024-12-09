@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
+import {UserService} from "../service/user.service";
+import {SweetAlertService} from "../sweetaleart/sweet-alert.service";
 
 @Component({
   selector: 'app-reset-password',
@@ -17,11 +19,13 @@ export class ResetPasswordComponent {
   resetPasswordEditForm: FormGroup;
   username: string = '';
   email: string = '';
-  isUsernameDisabled: boolean = true;
 
 
   constructor(private fb: FormBuilder,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              private userService: UserService,
+              private router: Router,
+              private sweetAlertService: SweetAlertService) {
   }
 
   ngOnInit() {
@@ -67,19 +71,41 @@ export class ResetPasswordComponent {
 
   onSubmit() {
 
-    /*const username = this.resetPasswordEditForm.get('username')?.value;
-    const email = this.resetPasswordEditForm.get('email')?.value;
+    if (this.resetPasswordEditForm.valid) {
 
-    console.log('Username:', username);
-    console.log('Email:', email);*/
+      const username = this.resetPasswordEditForm.get('username')?.value;
+      const email = this.resetPasswordEditForm.get('email')?.value;
+      const newPassword = this.resetPasswordEditForm.get('newPassword')?.value;
+      const confirmPassword = this.resetPasswordEditForm.get('confirmPassword')?.value;
+
+      //call api for reset password
+      this.userService.resetPassword(username, email, newPassword).subscribe(
+        (response) => {
+          console.log('Password reset successfully');
+          this.sweetAlertService.showAlert('Success', 'Password reset successfully', 'success');
+          this.router.navigate(['/login']);
+        },
+        (error) => {
+          console.error('Error resetting password:', error);
+          this.sweetAlertService.showAlert('Error', error.error.message, 'error');
+        }
+      );
+
+      // console.log('Username:', username);
+      // console.log('Email:', email);
+      // console.log('New Password:', newPassword);
+      // console.log('Confirm Password:', confirmPassword);
+    }
+
 
   }
 
   // Custom validator to match passwords
   matchPassword(control: any) {
+
     if (this.resetPasswordEditForm && control.value !== this.resetPasswordEditForm.get('newPassword')?.value) {
       return { mismatch: true };
     }
-    return null;
+    return false;
   }
 }

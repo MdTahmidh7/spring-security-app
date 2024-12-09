@@ -28,6 +28,30 @@ export class UserService {
 
   }
 
+  verifyOtp(username: string, email: string, otp: string): Observable<any> {
+
+    //sent username and email in request params
+    const params = { username, email, otp };
+
+    return this.http.get<any>(
+      `${this.apiUrl}/public/verify-otp`,
+      {params}
+    );
+
+  }
+
+  resetPassword(username: string, email: string, newPassword: string): Observable<any> {
+
+    //sent username and email in request params
+    const params = { username, email, newPassword };
+
+    return this.http.post<any>(
+      `${this.apiUrl}/public/reset-password`,
+      {},
+      {params}
+    );
+  }
+
 
 
 }

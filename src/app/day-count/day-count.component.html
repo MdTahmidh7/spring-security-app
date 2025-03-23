@@ -1,0 +1,119 @@
+<div class="w-100 mt-0">
+  <nav class="d-flex justify-content-between px-5 py-2 w-75 m-auto">
+    <div>Create new item</div>
+    <div>
+      <button
+        class="btn btn-primary btn-sm"
+        (click)="openCreateModal()"
+      >
+        Create
+      </button>
+    </div>
+  </nav>
+  <!--create a table for showing all the items-->
+  <div class="overflow-auto mt-10 mb-10 w-75 m-auto"
+       infiniteScroll
+       [infiniteScrollDistance]="2"
+       [infiniteScrollUpDistance]="1.5"
+       [infiniteScrollThrottle]="300"
+       (scrolled)="onScroll()">
+
+    <table class="table table-striped ">
+      <thead>
+      <tr class="text-center ">
+        <th>Name</th>
+        <th>Price</th>
+        <th>Created Date</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+        @for (item of items; track item){
+          <tr class="hover:bg-base-200 text-center">
+            <td>{{ item.name }}</td>
+            <td>{{ item.price }}</td>
+            <td>{{ item.createdDate | date }}</td>
+            <td>
+              <button class="btn">Edit</button>
+              <button class="btn btn-sm btn-error">Delete</button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+    <!-- Loading Indicator -->
+    <div *ngIf="loading" class="text-center py-4">
+      <span class="loading loading-spinner"></span>Loading...
+    </div>
+  </div>
+
+
+</div>
+
+
+<dialog id="create-item-modal" class="modal">
+  <div class="modal-box">
+    <h2 class="text-lg font-bold text-center">Create a New Item</h2>
+    <form [formGroup]="editForm" (ngSubmit)="saveItem()">
+      <div class="d-flex gap-3 mt-3">
+        <label class="label col-2">
+          <span class="label-text">Name</span>
+        </label>
+        <!-- Bind the email input to the form control -->
+        <input
+          type="text"
+          formControlName="name"
+          class="input input-bordered col-8 focus:outline-none focus:ring-0"
+        />
+        <div *ngIf="editForm.get('name')?.invalid && editForm.get('name')?.touched">
+          <small class="text-red-500">Please enter a valid name.</small>
+        </div>
+      </div>
+      <div class="d-flex gap-3 mt-3">
+        <label class="label col-2">
+          <span class="label-text">Price</span>
+        </label>
+        <!-- Bind the username input to the form control -->
+        <input
+          type="number"
+          formControlName="price"
+          class="input input-bordered col-8"
+        />
+        <div *ngIf="editForm.get('price')?.invalid && editForm.get('price')?.touched">
+          <small class="text-red-500">Price is required.</small>
+        </div>
+      </div>
+      <div class="d-flex gap-3 mt-3">
+        <label class="label col-2">
+          <span class="label-text">Date</span>
+        </label>
+        <!-- Bind the username input to the form control -->
+        <input
+          type="date"
+          formControlName="createdDate"
+          class="input input-bordered col-8"
+        />
+        <div *ngIf="editForm.get('createdDate')?.invalid && editForm.get('createdDate')?.touched">
+          <small class="text-red-500">Date is required.</small>
+        </div>
+      </div>
+      <div class="d-flex gap-3 mt-3">
+        <label class="label col-2">
+          <span class="label-text">Image</span>
+        </label>
+        <!-- Bind the username input to the form control -->
+        <div class="col-8">
+          <input type="file" formControlName="image" class="input-bordered form-control"/>
+        </div>
+        <div *ngIf="editForm.get('image')?.invalid && editForm.get('image')?.touched">
+          <small class="text-red-500">Image is required.</small>
+        </div>
+      </div>
+      <div class="modal-action">
+        <button type="submit" class="btn" [disabled]="editForm.invalid">Save</button>
+        <button type="button" class="btn" (click)="closeModal()">Close</button>
+      </div>
+    </form>
+  </div>
+</dialog>

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {Router} from "@angular/router";
+import {Router, RouterLink} from "@angular/router";
 import {AuthService} from "../../auth/auth.service";
 import {SweetAlertService} from "../../sweetaleart/sweet-alert.service";
 import {NgOptimizedImage} from "@angular/common";
@@ -9,7 +9,8 @@ import {NgOptimizedImage} from "@angular/common";
   selector: 'app-navbar',
   standalone: true,
   imports: [
-    NgOptimizedImage
+    NgOptimizedImage,
+    RouterLink
   ],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'

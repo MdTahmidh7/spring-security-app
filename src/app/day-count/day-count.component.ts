@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import {Component, ElementRef, ViewChild} from '@angular/core';
 import {DatePipe, NgIf} from "@angular/common";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {ItemService} from "../service/item.service";
 import {Item} from "../model/ItemModel";
 import {InfiniteScrollDirective} from "ngx-infinite-scroll";
+import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'app-day-count',
@@ -12,7 +13,8 @@ import {InfiniteScrollDirective} from "ngx-infinite-scroll";
     NgIf,
     ReactiveFormsModule,
     DatePipe,
-    InfiniteScrollDirective
+    InfiniteScrollDirective,
+    NgbModule
   ],
   templateUrl: './day-count.component.html',
   styleUrl: './day-count.component.css'
@@ -26,6 +28,8 @@ export class DayCountComponent {
   pageSize: number = 10;
   totalPages: number = 0;
   loading: boolean = false;
+
+  totalElements: number = 0;
 
   constructor( private fb: FormBuilder,
                private itemService: ItemService) {
@@ -52,6 +56,7 @@ export class DayCountComponent {
       next: (response) => {
         this.items = [...this.items, ...response.content]; // Append new items
         this.totalPages = response.totalPages;
+        this.totalElements = response.totalElements;
         this.pageNo++; // Increment for next call
         this.loading = false;
       },
@@ -80,6 +85,8 @@ export class DayCountComponent {
         {
           next: (response) => {
             console.log('Item created successfully:', response);
+            this.items = [];
+            this.pageNo = 0;
             this.getAllItems();
           },
           error: (error) => {
@@ -95,10 +102,40 @@ export class DayCountComponent {
   closeModal() {
     const modal = document.getElementById('create-item-modal') as HTMLDialogElement;
     modal?.close();
+    this.selectedItem = null;
+    const detailsModal = document.getElementById('details-modal') as HTMLDialogElement;
+    detailsModal?.close();
   }
 
   openCreateModal() {
     const modal = document.getElementById('create-item-modal') as HTMLDialogElement;
     modal?.showModal();
+  }
+
+  selectedItem: Item = null;
+
+  @ViewChild('detailsModal') detailsModal!: ElementRef<HTMLDialogElement>;
+
+  openDetailsModal(item: any) {
+    this.selectedItem = item;
+    this.detailsModal.nativeElement.showModal();
+  }
+
+  closeDetailsModal() {
+    this.detailsModal.nativeElement.close();
+  }
+
+  getTotalDaysUptoNow(createdDate: Date): number {
+    if (createdDate) {
+      const createdDateObj = new Date(createdDate);
+      if (isNaN(createdDateObj.getTime())) {
+        return 0; // Invalid date
+      }
+      const today = new Date();
+      // Calculate the difference in milliseconds
+      const diffTime = Math.abs(today.getTime() - createdDateObj.getTime());
+      return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    }
+    return 0;
   }
 }

@@ -13,7 +13,7 @@ export class Item {
   ) {
     this.name = itemName;
     this.price = price;
-    this.createdDate = date;
+    this.createdDate =  new Date(date);
     this.image = image
   }
 

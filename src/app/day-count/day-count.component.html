@@ -1,5 +1,5 @@
 <div class="w-100 mt-0">
-  <nav class="d-flex justify-content-between px-5 py-2 w-75 m-auto">
+  <nav class="d-flex justify-content-between px-5 py-2 w-75 m-auto mt-3">
     <div>Create new item</div>
     <div>
       <button
@@ -11,31 +11,39 @@
     </div>
   </nav>
   <!--create a table for showing all the items-->
-  <div class="overflow-auto mt-10 mb-10 w-75 m-auto"
+
+  <!--Show number of Total Elements-->
+  <div class="m-auto w-75 mb-2">
+    <button class="text-sm-start mt-10 bg-accent rounded px-2">
+      Total : {{ totalElements }}
+    </button>
+  </div>
+
+  <div class="overflow-auto mb-10 w-75 m-auto"
        infiniteScroll
        [infiniteScrollDistance]="2"
        [infiniteScrollUpDistance]="1.5"
        [infiniteScrollThrottle]="300"
        (scrolled)="onScroll()">
 
-    <table class="table table-striped ">
-      <thead>
-      <tr class="text-center ">
-        <th>Name</th>
-        <th>Price</th>
-        <th>Created Date</th>
-        <th>Actions</th>
+    <table class="table table-striped">
+      <thead class="">
+      <tr class="text-center text-lg">
+        <th class="bg-info">Name</th>
+        <th class="bg-info">Price</th>
+        <th class="bg-info">Created Date</th>
+        <th class="bg-info">Actions</th>
       </tr>
       </thead>
       <tbody>
         @for (item of items; track item){
-          <tr class="hover:bg-base-200 text-center">
+          <tr class="hover:bg-base-200 text-center mt-10">
             <td>{{ item.name }}</td>
             <td>{{ item.price }}</td>
             <td>{{ item.createdDate | date }}</td>
             <td>
-              <button class="btn">Edit</button>
-              <button class="btn btn-sm btn-error">Delete</button>
+              <button class="btn btn-sm" (click)="openDetailsModal(item)">View</button>
+              <button class="btn btn-sm btn-error">Stop</button>
             </td>
           </tr>
         }
@@ -115,5 +123,33 @@
         <button type="button" class="btn" (click)="closeModal()">Close</button>
       </div>
     </form>
+  </div>
+</dialog>
+
+
+<!-- DaisyUI Modal inside the same component -->
+<dialog #detailsModal class="modal">
+  <div class="modal-box">
+    <h2 class="text-lg font-bold text-center">Item Details</h2>
+
+    @if (selectedItem) {
+      <div class="grid grid-cols-2 gap-3 mt-3">
+        <label class="label"><span class="label-text">Name:</span></label>
+        <span class="label-text">{{ selectedItem.name }}</span>
+
+        <label class="label"><span class="label-text">Price:</span></label>
+        <span class="label-text">{{ selectedItem.price }}</span>
+
+        <label class="label"><span class="label-text">Created Date:</span></label>
+        <span class="label-text">{{ selectedItem.createdDate | date }}</span>
+
+        <label class="label"><span class="label-text">Day Used</span></label>
+        <span class="label-text">{{getTotalDaysUptoNow(selectedItem.createdDate)}}</span>
+      </div>
+    }
+
+    <div class="modal-action">
+      <button type="button" class="btn" (click)="closeDetailsModal()">Close</button>
+    </div>
   </div>
 </dialog>

@@ -4,7 +4,6 @@ import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/
 import {ItemService} from "../service/item.service";
 import {Item} from "../model/ItemModel";
 import {InfiniteScrollDirective} from "ngx-infinite-scroll";
-import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'app-day-count',
@@ -13,8 +12,7 @@ import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
     NgIf,
     ReactiveFormsModule,
     DatePipe,
-    InfiniteScrollDirective,
-    NgbModule
+    InfiniteScrollDirective
   ],
   templateUrl: './day-count.component.html',
   styleUrl: './day-count.component.css'

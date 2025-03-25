@@ -31,7 +31,9 @@
       <tr class="text-center text-lg">
         <th class="bg-info">Name</th>
         <th class="bg-info">Price</th>
-        <th class="bg-info">Created Date</th>
+        <th class="bg-info">Start Date</th>
+        <th class="bg-info">End Date</th>
+        <th class="bg-info">Days Used</th>
         <th class="bg-info">Actions</th>
       </tr>
       </thead>
@@ -40,10 +42,18 @@
           <tr class="hover:bg-base-200 text-center mt-10">
             <td>{{ item.name }}</td>
             <td>{{ item.price }}</td>
-            <td>{{ item.createdDate | date }}</td>
+            <td>{{ item.createdDateTime | date }}</td>
+            <td>{{ item.endDateTime? (item.endDateTime | date) : "-" }}</td>
+            <td>{{ getTotalDaysUptoNow(item) }}</td>
             <td>
               <button class="btn btn-sm" (click)="openDetailsModal(item)">View</button>
-              <button class="btn btn-sm btn-error">Stop</button>
+              <button
+                class="btn btn-sm btn-error"
+                (click)="openUpdateModal(item)"
+                [disabled]="item.endDateTime != null"
+              >
+                Stop
+              </button>
             </td>
           </tr>
         }
@@ -94,17 +104,28 @@
       </div>
       <div class="d-flex gap-3 mt-3">
         <label class="label col-2">
-          <span class="label-text">Date</span>
+          <span class="label-text">Start Date</span>
         </label>
         <!-- Bind the username input to the form control -->
         <input
-          type="date"
-          formControlName="createdDate"
+          type="datetime-local"
+          formControlName="createdDateTime"
           class="input input-bordered col-8"
         />
-        <div *ngIf="editForm.get('createdDate')?.invalid && editForm.get('createdDate')?.touched">
+        <div *ngIf="editForm.get('createdDateTime')?.invalid && editForm.get('createdDateTime')?.touched">
           <small class="text-red-500">Date is required.</small>
         </div>
+      </div>
+      <div class="d-flex gap-3 mt-3">
+        <label class="label col-2">
+          <span class="label-text">End Date</span>
+        </label>
+        <!-- Bind the username input to the form control -->
+        <input
+          type="datetime-local"
+          formControlName="endDateTime"
+          class="input input-bordered col-8"
+        />
       </div>
       <div class="d-flex gap-3 mt-3">
         <label class="label col-2">
@@ -141,10 +162,15 @@
         <span class="label-text">{{ selectedItem.price }}</span>
 
         <label class="label"><span class="label-text">Created Date:</span></label>
-        <span class="label-text">{{ selectedItem.createdDate | date }}</span>
+        <span class="label-text">{{ selectedItem.createdDateTime | date }}</span>
+
+        @if (selectedItem.endDateTime!=null){
+          <label class="label"><span class="label-text">End Date:</span></label>
+          <span class="label-text">{{ selectedItem.endDateTime | date }}</span>
+        }
 
         <label class="label"><span class="label-text">Day Used</span></label>
-        <span class="label-text">{{getTotalDaysUptoNow(selectedItem.createdDate)}}</span>
+        <span class="label-text">{{getTotalDaysUptoNow(selectedItem)}}</span>
       </div>
     }
 

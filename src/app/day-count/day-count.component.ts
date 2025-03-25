@@ -33,10 +33,13 @@ export class DayCountComponent {
                private itemService: ItemService) {
 
     this.editForm = this.fb.group({
+      id: [''],
       name: ['', [Validators.required]],
       price: ['', Validators.required],
-      createdDate: ['', Validators.required],
+      createdDateTime: ['', Validators.required],
+      endDateTime: ['',],
       image: ['fake/path',],
+      description: ['',],
     });
   }
 
@@ -79,19 +82,36 @@ export class DayCountComponent {
       this.item = this.editForm.value
       console.log('Item input:',this.item);
 
-      this.itemService.createItem(this.item).subscribe(
-        {
-          next: (response) => {
-            console.log('Item created successfully:', response);
-            this.items = [];
-            this.pageNo = 0;
-            this.getAllItems();
-          },
-          error: (error) => {
-            console.error('Error creating item:', error);
+      if (this.item.id) {
+        this.itemService.updateItem(this.item.id, this.item).subscribe(
+          {
+            next: (response) => {
+              console.log('Item updated successfully:', response);
+              this.items = [];
+              this.pageNo = 0;
+              this.getAllItems();
+            },
+            error: (error) => {
+              console.error('Error updating item:', error);
+            }
           }
-        }
-      );
+        );
+      }
+      else {
+        this.itemService.createItem(this.item).subscribe(
+          {
+            next: (response) => {
+              console.log('Item created successfully:', response);
+              this.items = [];
+              this.pageNo = 0;
+              this.getAllItems();
+            },
+            error: (error) => {
+              console.error('Error creating item:', error);
+            }
+          }
+        );
+      }
 
       this.closeModal();
     }
@@ -106,6 +126,7 @@ export class DayCountComponent {
   }
 
   openCreateModal() {
+    this.editForm.reset();
     const modal = document.getElementById('create-item-modal') as HTMLDialogElement;
     modal?.showModal();
   }
@@ -123,9 +144,11 @@ export class DayCountComponent {
     this.detailsModal.nativeElement.close();
   }
 
-  getTotalDaysUptoNow(createdDate: Date): number {
-    if (createdDate) {
-      const createdDateObj = new Date(createdDate);
+  getTotalDaysUptoNow(item: Item): number {
+    let createdDateTime: Date = item.createdDateTime;
+    let endDateTime: Date = item.endDateTime;
+    if (endDateTime==null) {
+      const createdDateObj = new Date(createdDateTime);
       if (isNaN(createdDateObj.getTime())) {
         return 0; // Invalid date
       }
@@ -133,7 +156,35 @@ export class DayCountComponent {
       // Calculate the difference in milliseconds
       const diffTime = Math.abs(today.getTime() - createdDateObj.getTime());
       return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    }else {
+      const createdDateObj = new Date(createdDateTime);
+      if (isNaN(createdDateObj.getTime())) {
+        return 0; // Invalid date
+      }
+      const endDateObj = new Date(endDateTime);
+      if (isNaN(endDateObj.getTime())) {
+        return 0; // Invalid date
+      }
+      // Calculate the difference in milliseconds
+      const diffTime = Math.abs(endDateObj.getTime() - createdDateObj.getTime());
+      return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     }
-    return 0;
+  }
+
+  openUpdateModal(item: Item) {
+    // Patch form values
+    const now = new Date();
+    const localISO = now.getFullYear() + '-' +
+      String(now.getMonth() + 1).padStart(2, '0') + '-' +
+      String(now.getDate()).padStart(2, '0') + 'T' +
+      String(now.getHours()).padStart(2, '0') + ':' +
+      String(now.getMinutes()).padStart(2, '0');
+
+    this.editForm.patchValue({
+      ...item,
+      endDateTime: localISO // "YYYY-MM-DDTHH:mm"
+    });
+    const modal = document.getElementById('create-item-modal') as HTMLDialogElement;
+    modal?.showModal();
   }
 }

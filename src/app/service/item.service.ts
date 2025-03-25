@@ -4,6 +4,7 @@ import {Router} from "@angular/router";
 import {Observable} from "rxjs";
 import {UserDTO} from "../model/UserDTO";
 import {catchError} from "rxjs/operators";
+import {Item} from "../model/ItemModel";
 
 @Injectable({
   providedIn: 'root'
@@ -43,5 +44,12 @@ export class ItemService {
     );
 
 
+  }
+
+  updateItem(id: number, item: Item) {
+
+    return this.http.put<any>(
+      `${this.apiUrl}/item/${id}/update`, item
+    );
   }
 }

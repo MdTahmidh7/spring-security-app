@@ -48,11 +48,17 @@
             <td>
               <button class="btn btn-sm" (click)="openDetailsModal(item)">View</button>
               <button
-                class="btn btn-sm btn-error"
+                class="btn btn-sm bg-warning"
                 (click)="openUpdateModal(item)"
                 [disabled]="item.endDateTime != null"
               >
                 Stop
+              </button>
+              <button
+                class="btn btn-sm btn-error"
+                (click)="openDeleteModal(item)"
+              >
+                Delete
               </button>
             </td>
           </tr>
@@ -69,7 +75,7 @@
 
 </div>
 
-
+<!--Create Item Modal-->
 <dialog id="create-item-modal" class="modal">
   <div class="modal-box">
     <h2 class="text-lg font-bold text-center">Create a New Item</h2>

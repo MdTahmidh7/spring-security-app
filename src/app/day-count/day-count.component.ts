@@ -4,6 +4,7 @@ import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/
 import {ItemService} from "../service/item.service";
 import {Item} from "../model/ItemModel";
 import {InfiniteScrollDirective} from "ngx-infinite-scroll";
+import {SweetAlertService} from "../sweetaleart/sweet-alert.service";
 
 @Component({
   selector: 'app-day-count',
@@ -29,8 +30,10 @@ export class DayCountComponent {
 
   totalElements: number = 0;
 
+
   constructor( private fb: FormBuilder,
-               private itemService: ItemService) {
+               private itemService: ItemService,
+               private sweetAlertService: SweetAlertService) {
 
     this.editForm = this.fb.group({
       id: [''],
@@ -186,5 +189,29 @@ export class DayCountComponent {
     });
     const modal = document.getElementById('create-item-modal') as HTMLDialogElement;
     modal?.showModal();
+  }
+
+  openDeleteModal(item: Item) {
+    //Open SWAl for taking confirmation
+    this.sweetAlertService.showConfirmationDialog(
+      'Are you sure?',
+      'You won\'t be able to revert this!',
+      'Yes, delete it!'
+    ).then(r => {
+      if (r.isConfirmed) {
+        this.itemService.deleteItem(item.id).subscribe({
+          next: (response) => {
+            console.log('Item deleted successfully:', response);
+            this.items = [];
+            this.pageNo = 0;
+            this.getAllItems();
+          },
+          error: (error) => {
+            console.error('Error deleting item:', error);
+          }
+        })
+        this.closeModal();
+      }
+    })
   }
 }

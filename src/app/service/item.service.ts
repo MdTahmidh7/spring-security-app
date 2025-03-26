@@ -52,4 +52,11 @@ export class ItemService {
       `${this.apiUrl}/item/${id}/update`, item
     );
   }
+
+  deleteItem(id: number) {
+
+    return this.http.delete<any>(
+      `${this.apiUrl}/item/${id}/delete`
+    );
+  }
 }

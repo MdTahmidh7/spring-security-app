@@ -217,8 +217,8 @@ export class DayCountComponent {
     })
   }
 
-  itemList = ["Item A", "Item B", "Item C", "Item D", "Item E","Item A", "Item B", "Item C", "Item D", "Item E","Item A", "Item B", "Item C", "Item D", "Item E","Item A", "Item B", "Item C", "Item D", "Item E"];
-  dayCounts = [10, 15, 8, 12, 20, 10, 15, 8, 12, 20,10, 15, 8, 12, 20, 10, 15, 8, 12, 20]; // Corresponding day counts
+  itemList = ["Item A  used in a ", "Item B", "Item C", "Item D", "Item E","Item A", "Item B", "Item C", "Item D", "Item E","Item A", "Item B", "Item C", "Item D", "Item E","Item A", "Item B", "Item C", "Item D", "Item E"];
+  dayCounts = [10, 15, 8, 12, 20, 10, 15, 8, 12, 30,10, 15, 8, 12, 20, 10, 15, 8, 12, 20]; // Corresponding day counts
 
 
 }

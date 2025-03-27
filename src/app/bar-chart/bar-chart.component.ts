@@ -33,29 +33,10 @@ export class BarChartComponent implements OnInit {
   }
 
   initChart() {
-    /*this.chartOptions = {
-      series: [{ name: "Day Count", data: this.data }],
-      chart: { type: "bar", height: 350 },
-      plotOptions: { bar: { horizontal: false, columnWidth: "55%" } },
-      dataLabels: { enabled: false },
-      xaxis: { categories: this.categories },
-      title: { text: this.chartTitle },
-      colors: [
-        "#008FFB",
-        "#00E396",
-        "#FEB019",
-        "#FF4560",
-        "#775DD0",
-        "#546E7A",
-        "#26a69a",
-        "#D10CE8"
-      ],
-    };*/
-
     this.chartOptions = {
       series: [
         {
-          name: "distibuted",
+          name: "Number of days",
           data: this.data
         }
       ],

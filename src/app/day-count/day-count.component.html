@@ -13,9 +13,13 @@
   <!--create a table for showing all the items-->
 
   <!--Show number of Total Elements-->
-  <div class="m-auto w-75 mb-2">
+  <div class="m-auto w-75 mb-2 d-flex justify-content-between">
     <button class="text-sm-start mt-10 bg-accent rounded px-2">
       Total : {{ totalElements }}
+    </button>
+
+    <button class="btn btn-sm btn-ghost mt-10 border-accent">
+      Show Stats
     </button>
   </div>
 
@@ -78,7 +82,12 @@
 <!--Create Item Modal-->
 <dialog id="create-item-modal" class="modal">
   <div class="modal-box">
-    <h2 class="text-lg font-bold text-center">Create a New Item</h2>
+    <!--get id from the editFrom-->
+    @if (editForm.controls['id'].value) {
+      <h2 class="text-lg font-bold text-center">Update Item</h2>
+    } @else {
+      <h2 class="text-lg font-bold text-center">Create a New Item</h2>
+    }
     <form [formGroup]="editForm" (ngSubmit)="saveItem()">
       <div class="d-flex gap-3 mt-3">
         <label class="label col-2">

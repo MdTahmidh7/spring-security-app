@@ -1,11 +1,12 @@
 import {Component, ElementRef, ViewChild} from '@angular/core';
-import {DatePipe, NgIf} from "@angular/common";
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {CurrencyPipe, DatePipe, DecimalPipe, NgIf} from "@angular/common";
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {ItemService} from "../service/item.service";
 import {Item} from "../model/ItemModel";
 import {InfiniteScrollDirective} from "ngx-infinite-scroll";
 import {SweetAlertService} from "../sweetaleart/sweet-alert.service";
 import {BarChartComponent} from "../bar-chart/bar-chart.component";
+import {NgbTooltip} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'app-day-count',
@@ -15,7 +16,11 @@ import {BarChartComponent} from "../bar-chart/bar-chart.component";
     ReactiveFormsModule,
     DatePipe,
     InfiniteScrollDirective,
-    BarChartComponent
+    BarChartComponent,
+    FormsModule,
+    CurrencyPipe,
+    DecimalPipe,
+    NgbTooltip
   ],
   templateUrl: './day-count.component.html',
   styleUrl: './day-count.component.css'
@@ -29,8 +34,11 @@ export class DayCountComponent {
   pageSize: number = 10;
   totalPages: number = 0;
   loading: boolean = false;
-
   totalElements: number = 0;
+
+  filterFromDate: any ;
+  filterToDate: any ;
+  showStatsFlag: boolean = false;
 
 
   constructor( private fb: FormBuilder,
@@ -46,6 +54,15 @@ export class DayCountComponent {
       image: ['fake/path',],
       description: ['',],
     });
+
+    const today = new Date();
+    const oneMonthAgo = new Date();
+    oneMonthAgo.setMonth(today.getMonth() - 1);
+
+    // Format to YYYY-MM-DD for input[type="date"]
+    this.filterToDate = today.toISOString().split('T')[0];
+    this.filterFromDate = oneMonthAgo.toISOString().split('T')[0];
+
   }
 
   ngOnInit(): void {
@@ -57,20 +74,26 @@ export class DayCountComponent {
       return;
     }
 
+    console.log("in get all method")
     this.loading = true;
-    this.itemService.getAllItems(this.pageNo, this.pageSize).subscribe({
-      next: (response) => {
-        this.items = [...this.items, ...response.content]; // Append new items
-        this.totalPages = response.totalPages;
-        this.totalElements = response.totalElements;
-        this.pageNo++; // Increment for next call
-        this.loading = false;
-      },
-      error: (error) => {
-        console.error('Error fetching items:', error);
-        this.loading = false;
-      }
-    });
+    this.itemService.getAllItems(
+      this.filterFromDate,
+      this.filterToDate,
+      this.pageNo,
+      this.pageSize)
+      .subscribe({
+        next: (response) => {
+          this.items = [...this.items, ...response.content]; // Append new items
+          this.totalPages = response.totalPages;
+          this.totalElements = response.totalElements;
+          this.pageNo++; // Increment for next call
+          this.loading = false;
+        },
+        error: (error) => {
+          console.error('Error fetching items:', error);
+          this.loading = false;
+        }
+      });
   }
 
   onScroll() {
@@ -217,8 +240,25 @@ export class DayCountComponent {
     })
   }
 
-  itemList = ["Item A  used in a ", "Item B", "Item C", "Item D", "Item E","Item A", "Item B", "Item C", "Item D", "Item E","Item A", "Item B", "Item C", "Item D", "Item E","Item A", "Item B", "Item C", "Item D", "Item E"];
-  dayCounts = [10, 15, 8, 12, 20, 10, 15, 8, 12, 30,10, 15, 8, 12, 20, 10, 15, 8, 12, 20]; // Corresponding day counts
+  itemList = [];
+  dayCounts = []; // Corresponding day counts
+  getFilterSearchItems() {
+    console.log("click on search");
+    this.items = [];
+    this.pageNo = 0;
+    this.getAllItems();
+  }
 
+  showStats() {
+    this.itemList = [];
+    this.dayCounts = [];
 
+    this.items.map(item => {
+      this.itemList.push(item.name);
+      this.dayCounts.push(this.getTotalDaysUptoNow(item));
+    });
+
+    this.showStatsFlag = !this.showStatsFlag;
+    console.log("Show Stats", this.showStatsFlag);
+  }
 }

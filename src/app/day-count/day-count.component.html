@@ -1,34 +1,63 @@
-<app-bar-chart
-  [chartTitle]="'Items vs Day Count'"
-  [categories]="itemList"
-  [data]="dayCounts"
->
-</app-bar-chart>
-
+@if (showStatsFlag){
+  <div class="w-75 m-auto bg-emerald-100 mt-2 rounded-xl">
+    <app-bar-chart
+      [chartTitle]="'Items vs Day Count'"
+      [categories]="itemList"
+      [data]="dayCounts"
+    >
+    </app-bar-chart>
+  </div>
+}
 
 <div class="w-100 mt-0">
-  <nav class="d-flex justify-content-between px-5 py-2 w-75 m-auto mt-3">
-    <div>Create new item</div>
-    <div>
-      <button
-        class="btn btn-primary btn-sm"
-        (click)="openCreateModal()"
-      >
-        Create
-      </button>
-    </div>
-  </nav>
   <!--create a table for showing all the items-->
+  <div class="row w-75 m-auto bg-blue-200 rounded-xl p-3 mt-3">
+    <!--FilterFromDate-->
+    <div class=" gap-3 col-3 mb-2">
+      <label class="label py-0">
+        <span class="label-text">Start Date</span>
+      </label>
+      <input type="date" class="input input-bordered col-12" [(ngModel)]="filterFromDate" />
+    </div>
+    <div class=" gap-3 col-3 mb-2">
+      <label class="label py-0">
+        <span class="label-text">End Date</span>
+      </label>
+      <input type="date" class="input input-bordered col-12" [(ngModel)]="filterToDate" />
+    </div>
+  </div>
 
   <!--Show number of Total Elements-->
   <div class="m-auto w-75 mb-2 d-flex justify-content-between">
-    <button class="text-sm-start mt-10 bg-accent rounded px-2">
-      Total : {{ totalElements }}
-    </button>
+    <div>
+      <button class="text-sm-start mt-10 bg-accent rounded px-2">
+        Total : {{ totalElements }}
+      </button>
+    </div>
 
-    <button class="btn btn-sm btn-ghost mt-10 border-accent">
-      Show Stats
-    </button>
+    <div class="d-flex gap-1">
+      <button
+        class="btn btn-sm btn-secondary btn-outline mt-10 border-b-pink-500"
+        (click)="showStats()"
+      >
+        <i class="far fa-chart-bar"></i>
+        {{showStatsFlag ? "Hide Stats" : "Show Stats"}}
+      </button>
+      <button
+        class="btn btn-sm btn-accent btn-outline mt-10 border-accent"
+        (click)="getFilterSearchItems()"
+      >
+        <i class="fas fa-search"></i>
+        Search
+      </button>
+      <button
+        class="btn btn-sm btn-primary btn-outline mt-10"
+        (click)="openCreateModal()"
+      >
+        <i class="fas fa-plus"></i>
+        Create
+      </button>
+    </div>
   </div>
 
   <div class="overflow-auto mb-10 w-75 m-auto"
@@ -38,39 +67,56 @@
        [infiniteScrollThrottle]="300"
        (scrolled)="onScroll()">
 
-    <table class="table table-striped">
-      <thead class="">
+    <table class="table table-secondary table-hover table-striped">
+      <thead class="outline outline-2 outline-black">
       <tr class="text-center text-lg">
-        <th class="bg-info">Name</th>
-        <th class="bg-info">Price</th>
-        <th class="bg-info">Start Date</th>
-        <th class="bg-info">End Date</th>
-        <th class="bg-info">Days Used</th>
-        <th class="bg-info">Actions</th>
+        <th class="">Name</th>
+        <th class="">Price</th>
+        <th class="">Start Date</th>
+        <th class="">End Date</th>
+        <th class="">Days Used</th>
+        <th class="text-center col-2">Actions</th>
       </tr>
       </thead>
       <tbody>
         @for (item of items; track item){
           <tr class="hover:bg-base-200 text-center mt-10">
             <td>{{ item.name }}</td>
-            <td>{{ item.price }}</td>
+            <td>৳{{ item.price | number:'1.0-0' }}</td>
             <td>{{ item.createdDateTime | date }}</td>
             <td>{{ item.endDateTime? (item.endDateTime | date) : "-" }}</td>
             <td>{{ getTotalDaysUptoNow(item) }}</td>
-            <td>
-              <button class="btn btn-sm" (click)="openDetailsModal(item)">View</button>
+            <td class="col d-flex gap-1 justify-content-end">
               <button
-                class="btn btn-sm bg-warning"
+                class="btn btn-neutral btn-sm text-white"
+                (click)="openDetailsModal(item)"
+              >
+                <i
+                  class="fas fa-eye"
+                  style="color: #B197FC;"
+                  [ngbTooltip]="'View Details'"
+                ></i>
+              </button>
+              <button
+                class="btn btn-warning btn-sm border-0"
                 (click)="openUpdateModal(item)"
                 [disabled]="item.endDateTime != null"
               >
-                Stop
+                <i
+                  class="fas fa-ban"
+                  style="color: #000000;"
+                  [ngbTooltip]="'Stop day count'"
+                ></i>
               </button>
               <button
-                class="btn btn-sm btn-error"
+                class="btn btn-sm btn-error text- white"
                 (click)="openDeleteModal(item)"
               >
-                Delete
+                <i
+                  class="fas fa-trash"
+                  style="color: #bd021f;"
+                  [ngbTooltip]="'Delete Item'"
+                ></i>
               </button>
             </td>
           </tr>

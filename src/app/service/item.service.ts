@@ -33,10 +33,13 @@ export class ItemService {
   //     .pipe(catchError(this.handleError));
   // }
 
-  getAllItems(pageNo: number, pageSize: number) {
+  getAllItems(filterFromDate: any,
+              filterToDate: any,
+              pageNo: number,
+              pageSize: number) {
 
     //sent pageNo and pageSize in request params
-    const params = { pageNo, pageSize };
+    const params = { filterFromDate, filterToDate, pageNo, pageSize };
 
     return this.http.get<any>(
       `${this.apiUrl}/items`,

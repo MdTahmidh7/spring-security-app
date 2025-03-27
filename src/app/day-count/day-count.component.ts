@@ -5,6 +5,7 @@ import {ItemService} from "../service/item.service";
 import {Item} from "../model/ItemModel";
 import {InfiniteScrollDirective} from "ngx-infinite-scroll";
 import {SweetAlertService} from "../sweetaleart/sweet-alert.service";
+import {BarChartComponent} from "../bar-chart/bar-chart.component";
 
 @Component({
   selector: 'app-day-count',
@@ -13,7 +14,8 @@ import {SweetAlertService} from "../sweetaleart/sweet-alert.service";
     NgIf,
     ReactiveFormsModule,
     DatePipe,
-    InfiniteScrollDirective
+    InfiniteScrollDirective,
+    BarChartComponent
   ],
   templateUrl: './day-count.component.html',
   styleUrl: './day-count.component.css'
@@ -214,4 +216,9 @@ export class DayCountComponent {
       }
     })
   }
+
+  itemList = ["Item A", "Item B", "Item C", "Item D", "Item E","Item A", "Item B", "Item C", "Item D", "Item E","Item A", "Item B", "Item C", "Item D", "Item E","Item A", "Item B", "Item C", "Item D", "Item E"];
+  dayCounts = [10, 15, 8, 12, 20, 10, 15, 8, 12, 20,10, 15, 8, 12, 20, 10, 15, 8, 12, 20]; // Corresponding day counts
+
+
 }

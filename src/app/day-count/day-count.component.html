@@ -13,17 +13,17 @@
   <!--create a table for showing all the items-->
   <div class="row w-75 m-auto bg-blue-200 rounded-xl p-3 mt-3">
     <!--FilterFromDate-->
-    <div class=" gap-3 col-3 mb-2">
+    <div class=" gap-3 col-2 mb-2">
       <label class="label py-0">
         <span class="label-text">Start Date</span>
       </label>
-      <input type="date" class="input input-bordered col-12" [(ngModel)]="filterFromDate" />
+      <input type="date" class="input input-bordered col-12 h-10" [(ngModel)]="filterFromDate" />
     </div>
-    <div class=" gap-3 col-3 mb-2">
+    <div class=" gap-3 col-2 mb-2">
       <label class="label py-0">
         <span class="label-text">End Date</span>
       </label>
-      <input type="date" class="input input-bordered col-12" [(ngModel)]="filterToDate" />
+      <input type="date" class="input input-bordered col-12 h-10" [(ngModel)]="filterToDate" />
     </div>
   </div>
 
@@ -70,6 +70,7 @@
     <table class="table table-secondary table-hover table-striped">
       <thead class="outline outline-2 outline-black">
       <tr class="text-center text-lg">
+        <th>Sl No</th>
         <th class="">Name</th>
         <th class="">Price</th>
         <th class="">Start Date</th>
@@ -79,8 +80,9 @@
       </tr>
       </thead>
       <tbody>
-        @for (item of items; track item){
+        @for (item of items; track item; let i = $index){
           <tr class="hover:bg-base-200 text-center mt-10">
+            <td>{{ i + 1 }}</td>
             <td>{{ item.name }}</td>
             <td>৳{{ item.price | number:'1.0-0' }}</td>
             <td>{{ item.createdDateTime | date }}</td>
@@ -113,7 +115,7 @@
                 (click)="openDeleteModal(item)"
               >
                 <i
-                  class="fas fa-trash"
+                  class="fas fa-trash-alt"
                   style="color: #bd021f;"
                   [ngbTooltip]="'Delete Item'"
                 ></i>

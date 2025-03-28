@@ -25,6 +25,21 @@
       </label>
       <input type="date" class="input input-bordered col-12 h-10" [(ngModel)]="filterToDate" />
     </div>
+
+    <div class=" gap-3 col-3 mb-2">
+      <label class="label py-0">
+        <span class="label-text">Search By Name</span>
+      </label>
+      <app-searchable-input
+        [title]="'Type here to search'"
+        urlToSearch="items/search"
+        [formatter]="referrerSearchResultFormatter"
+        (onSelect)="onSelectReferrerId($event)"
+        [showLabel]="false"
+        [showSmForm]="false">
+      </app-searchable-input>
+    </div>
+
   </div>
 
   <!--Show number of Total Elements-->

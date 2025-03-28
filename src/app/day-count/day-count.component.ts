@@ -7,6 +7,7 @@ import {InfiniteScrollDirective} from "ngx-infinite-scroll";
 import {SweetAlertService} from "../sweetaleart/sweet-alert.service";
 import {BarChartComponent} from "../bar-chart/bar-chart.component";
 import {NgbTooltip} from "@ng-bootstrap/ng-bootstrap";
+import {SearchableInputComponent} from "../searchable-input/searchable-input.component";
 
 @Component({
   selector: 'app-day-count',
@@ -20,7 +21,8 @@ import {NgbTooltip} from "@ng-bootstrap/ng-bootstrap";
     FormsModule,
     CurrencyPipe,
     DecimalPipe,
-    NgbTooltip
+    NgbTooltip,
+    SearchableInputComponent
   ],
   templateUrl: './day-count.component.html',
   styleUrl: './day-count.component.css'
@@ -39,6 +41,8 @@ export class DayCountComponent {
   filterFromDate: any ;
   filterToDate: any ;
   showStatsFlag: boolean = false;
+  selectedReferrerId: any;
+  referrerSearch: ReferrerSearch;
 
 
   constructor( private fb: FormBuilder,
@@ -260,5 +264,25 @@ export class DayCountComponent {
 
     this.showStatsFlag = !this.showStatsFlag;
     console.log("Show Stats", this.showStatsFlag);
+  }
+
+
+  referrerSearchResultFormatter = (result: any) => `${result.name}-${result.price}৳`;
+
+
+  onSelectReferrerId($event: any) {
+    console.log('Selected Referrer:', $event.item);
+    this.selectedReferrerId = $event.id;
+    this.referrerSearch = $event;
+  }
+}
+
+export class ReferrerSearch {
+  id?: any;
+  name: string;
+  price?: number;
+
+  toString(): string {
+    return this.name;
   }
 }

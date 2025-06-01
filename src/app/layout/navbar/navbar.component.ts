@@ -56,4 +56,7 @@ export class NavbarComponent {
   }
 
 
+  navigateToTransactionPage() {
+    this.router.navigate(['/transaction']);
+  }
 }

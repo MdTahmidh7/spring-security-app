@@ -7,6 +7,7 @@ import {ResetPasswordComponent} from "./reset-password/reset-password.component"
 import {ForgetPasswordComponent} from "./forget-password/forget-password.component";
 import {VerifyOtpComponent} from "./verify-otp/verify-otp.component";
 import {DayCountComponent} from "./day-count/day-count.component";
+import {TransactionComponent} from "./transaction/transaction.component";
 
 
 
@@ -23,6 +24,7 @@ export const routes: Routes = [
     children: [
       { path: 'dashboard', component: DashboardComponent }, // Dashboard route
       { path: 'day-count', component: DayCountComponent},
+      { path: 'transaction', component: TransactionComponent},
       // Add other routes here
     ],
   },

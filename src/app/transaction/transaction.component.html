@@ -1,0 +1,144 @@
+<!--create date filter-->
+<div class="flex items-center mb-4">
+  <label for="startDate" class="mr-2">Start Date:</label>
+  <input type="date" id="startDate" class="border rounded p-2" [(ngModel)]="startDate">
+  <label for="endDate" class="ml-4 mr-2">End Date:</label>
+  <input type="date" id="endDate" class="border rounded p-2" [(ngModel)]="endDate">
+  <button class="ml-4 btn btn-primary" (click)="filterTransactions()">Filter</button>
+</div>
+
+<!-- Create Button -->
+<button class="btn btn-primary" (click)="openModal()">Create Transaction</button>
+
+<!-- Modal -->
+<dialog class="modal" [open]="showModal">
+  <div class="modal-box w-11/12 max-w-2xl">
+    <h3 class="font-bold text-lg mb-4">Create New Transaction</h3>
+
+    <form [formGroup]="transactionForm" (ngSubmit)="confirmSubmit()">
+      <div class="grid grid-cols-2 gap-4">
+
+        <input type="number" placeholder="Deposit Amount" class="input input-bordered" formControlName="depositAmount">
+        <input type="number" placeholder="Withdraw Amount" class="input input-bordered" formControlName="withdrawAmount">
+
+        <div class="row">
+          <label>Select Transaction Type</label>
+          <select class="select select-bordered" formControlName="transactionType">
+            @for (type of transactionTypes; track type; let i = $index) {
+              <option [value]="type">
+                {{ type }}
+              </option>
+            }
+          </select>
+        </div>
+
+        <div class="col">
+          <label class="col-12">Select Transaction Medium</label>
+          <select class="select select-bordered col-12" formControlName="transactionMedium">
+            @for (type of transactionMedium; track type; let i = $index) {
+              <option [value]="type">
+                {{ type }}
+              </option>
+            }
+          </select>
+        </div>
+
+        <div class=" gap-3 col-12 mb-2">
+          <label class="label py-0">
+            <span class="label-text">Sender</span>
+          </label>
+          <app-searchable-input
+            [title]="'Type here to search'"
+            urlToSearch="members/search"
+            [formatter]="memberSearchResultFormatter"
+            (onSelect)="onSelectSenderId($event)"
+            [showLabel]="false"
+            [showSmForm]="false">
+          </app-searchable-input>
+        </div>
+        <div class=" gap-3 col-12 mb-2">
+          <label class="label py-0">
+            <span class="label-text">Receiver</span>
+          </label>
+          <app-searchable-input
+            [title]="'Type here to search'"
+            urlToSearch="members/search"
+            [formatter]="memberSearchResultFormatter"
+            (onSelect)="onSelectReceiverId($event)"
+            [showLabel]="false"
+            [showSmForm]="false">
+          </app-searchable-input>
+        </div>
+
+        <div class="col">
+          <label class="col-12">Transaction Date</label>
+          <input type="date" class="input input-bordered col-12" formControlName="transactionDate">
+        </div>
+
+        <div class="col">
+          <label class="col-12">Deposit Month</label>
+          <input type="month" class="input input-bordered col-12" formControlName="depositMonth">
+        </div>
+
+
+      </div>
+
+      <textarea placeholder="Description (optional)" class="textarea textarea-bordered mt-4 w-full"
+                maxlength="255" formControlName="transactionDescription"></textarea>
+
+      <div class="modal-action">
+        <button type="submit" class="btn btn-primary" [disabled]="transactionForm.invalid">Submit</button>
+        <button type="button" class="btn" (click)="closeModal()">Cancel</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Confirmation Dialog -->
+  @if (showConfirm){
+    <div class="modal-backdrop">
+      <div class="modal modal-open">
+        <div class="modal-box">
+          <h3 class="font-bold text-lg">Are you sure to create a transaction?</h3>
+          <div class="modal-action">
+            <button class="btn btn-success" (click)="submitTransaction()">Yes</button>
+            <button class="btn btn-ghost" (click)="showConfirm = false">No</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</dialog>
+
+<!--Display list of transactions in a table-->
+<div class="overflow-x-auto">
+  <table class="table w-full">
+    <thead>
+    <tr>
+      <th>Transaction Date</th>
+      <th>Deposit Month</th>
+      <th>Sender</th>
+      <th>Receiver</th>
+      <th>Deposit Amount</th>
+      <th>Withdraw Amount</th>
+      <th>Transaction Type</th>
+      <th>Transaction Medium</th>
+      <th>Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let transaction of transactions">
+      <td>{{ transaction.transactionDate }}</td>
+      <td>{{ transaction.depositMonth }}</td>
+      <td>{{ transaction.senderName }}</td>
+      <td>{{ transaction.receiverName }}</td>
+      <td>{{ transaction.depositAmount }}</td>
+      <td>{{ transaction.withdrawAmount }}</td>
+      <td>{{ transaction.transactionType }}</td>
+      <td>{{ transaction.transactionMedium }}</td>
+      <td>{{ transaction.transactionDescription }}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+

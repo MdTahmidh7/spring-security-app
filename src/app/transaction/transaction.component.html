@@ -127,12 +127,12 @@
     </thead>
     <tbody>
     <tr *ngFor="let transaction of transactions">
-      <td>{{ transaction.transactionDate }}</td>
-      <td>{{ transaction.depositMonth }}</td>
+      <td>{{ transaction.transactionDate | date:'dd MMM YY'}}</td>
+      <td>{{ transaction.depositMonth | date:'MMM YY'}}</td>
       <td>{{ transaction.senderName }}</td>
       <td>{{ transaction.receiverName }}</td>
-      <td>{{ transaction.depositAmount }}</td>
-      <td>{{ transaction.withdrawAmount }}</td>
+      <td>{{ transaction.depositAmount | number}}</td>
+      <td>{{ transaction.withdrawAmount | number}}</td>
       <td>{{ transaction.transactionType }}</td>
       <td>{{ transaction.transactionMedium }}</td>
       <td>{{ transaction.transactionDescription }}</td>
